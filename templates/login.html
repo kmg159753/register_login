@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 페이지</title>
+
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gothic+A1&display=swap');
+
+        * {
+            font-family: 'Gothic A1', sans-serif;
+        }
+
+        .mytitle {
+            background-color: green;
+
+            width: 300px;
+            height: 200px;
+
+            border-radius: 10px;
+            color: white;
+
+            text-align: center;
+
+            padding-top: 30px;
+
+            background-image: url('https://www.ancient-origins.net/sites/default/files/field/image/Agesilaus-II-cover.jpg');
+            background-position: center;
+            background-size: cover;
+        }
+
+        .wrap {
+            width: 300px;
+            margin: 20px auto 0px auto;
+        }
+    </style>
+    <script>
+
+        function login() {
+            let id = $('#l_id').val()
+            let password = $('#l_password').val()
+
+            let formData = new FormData();
+            formData.append("id_give", id);
+            formData.append("pw_give", password);          
+
+            
+            fetch('/login', { method: "POST", body: formData }).then((res) => res.json()).then((data) => {               
+
+                if (data['result'] == 'success') {
+                    
+                    $.cookie('mytoken', data['token']);
+                    alert(data['msg'])
+                    window.location.replace('/call_index')
+                }
+                else if (data['result'] == 'fail'){
+                    alert(data['msg'])
+                    
+                    window.location.reload()
+                }
+            })
+        }
+    </script>
+</head>
+
+<body>    
+
+    <div class="wrap">
+        <p>ID : <input id="l_id" type="text" /></p>
+        <p>PW : <input id="l_password" type="text" /></p>
+        <button onclick="login()"> 로그인하기</button>
+    </div>
+
+</body>
+
+</html>
